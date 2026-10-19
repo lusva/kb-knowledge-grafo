@@ -1,0 +1,60 @@
+{% comment %}
+Cornice delle pagine di accesso (login, cambio password). Stessi token grafici
+di kb/static/index.html: chi arriva qui deve vedere la stessa applicazione.
+{% endcomment %}<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block titolo %}NIKI{% endblock %}</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/marchio/favicon-32.png">
+<link rel="apple-touch-icon" href="/marchio/apple-touch-icon.png">
+<meta name="theme-color" content="#7C3AED">
+<link rel="stylesheet" href="/font/fonts.css">
+<style>
+  :root{
+    --bg:#ffffff; --bg2:#FDFCF7; --panel:#f6f4ec; --border:#e9e6dc;
+    --text:#0F0E1A; --muted:#6B7280; --accent:#7C3AED; --accent-hover:#6d2ce0;
+    --accent-soft:#f1ebfd; --err:#b3261e; --ok:#166534;
+    --font:'Inter',-apple-system,'Helvetica Neue',Arial,sans-serif;
+    --font-title:'Montserrat',var(--font);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font:400 14px/1.5 var(--font); background:var(--bg2); color:var(--text);
+       min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px;}
+  .card{background:var(--bg); border:1px solid var(--border); border-radius:14px;
+        padding:32px 30px; width:100%; max-width:360px; box-shadow:0 6px 24px rgba(15,14,26,.06);}
+  h1{font-family:var(--font-title); font-size:17px; font-weight:800;
+     letter-spacing:-.02em; margin-bottom:4px;}
+  .sub{color:var(--muted); font-size:12.5px; margin-bottom:22px;}
+  label{display:block; font-size:12px; font-weight:600; margin:14px 0 5px;}
+  input{width:100%; background:var(--panel); border:1px solid var(--border);
+        color:var(--text); border-radius:9px; padding:9px 12px;
+        font:400 13.5px var(--font); outline:none;}
+  input:focus{border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft);}
+  button{width:100%; margin-top:22px; background:var(--accent); color:#fff;
+         border:1px solid var(--accent); border-radius:9px; padding:10px 12px;
+         font:600 13.5px var(--font); cursor:pointer;}
+  button:hover{background:var(--accent-hover); border-color:var(--accent-hover);}
+  .error{background:#fdf1f0; border:1px solid #f3d2cf; color:var(--err);
+         border-radius:9px; padding:9px 12px; font-size:12.5px; margin-bottom:6px;}
+  .ok{background:#f0fdf4; border:1px solid #cdeed8; color:var(--ok);
+      border-radius:9px; padding:9px 12px; font-size:12.5px;}
+  .aiuto{color:var(--muted); font-size:11.5px; margin-top:5px; line-height:1.45;}
+  .aiuto li{margin-left:16px;}
+  .marchio{text-align:center; margin-bottom:22px;}
+  .marchio img{display:block; width:72px; height:72px; margin:0 auto 14px;
+               filter:drop-shadow(0 6px 14px rgba(76,29,149,.22));}
+  .marchio h1{font-size:22px; margin-bottom:2px;}
+  .marchio .sub{margin-bottom:0;}
+  .card.piccola-testa .marchio img{width:44px; height:44px; margin-bottom:12px;}
+  .card.piccola-testa .marchio h1{font-size:17px;}
+  a.link{display:block; text-align:center; margin-top:16px; color:var(--muted);
+         font-size:12.5px; text-decoration:none;}
+  a.link:hover{color:var(--accent);}
+</style>
+</head>
+<body>
+{% block contenuto %}{% endblock %}
+</body>
+</html>

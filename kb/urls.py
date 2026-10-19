@@ -1,0 +1,35 @@
+from django.urls import path
+
+from .views import chat, documenti, knowledge, pagine, stato
+
+urlpatterns = [
+    path("", pagine.home),
+    path("rag", pagine.index),
+    path("chat", pagine.chat_page),
+    path("config", pagine.config_page),
+    path("api/status", stato.status),
+    path("api/config", stato.config_view),
+    path("api/kbs", knowledge.kbs_view),
+    path("api/kbs/<slug:slug>", knowledge.kb_detail_view),
+    path("api/kbs/<slug:slug>/import", knowledge.kb_import_view),
+    path("api/kbs/<slug:slug>/files", knowledge.kb_files_view),
+    path("api/kbs/<slug:slug>/filtro", knowledge.kb_filtro_view),
+    path("api/kbs/<slug:slug>/elimina", knowledge.kb_elimina_view),
+    path("api/pick", knowledge.pick_view),
+    path("api/reindex", knowledge.reindex_view),
+    path("api/reindex/stato", knowledge.reindex_state_view),
+    path("api/lavori/<str:lavoro_id>/ferma", knowledge.lavoro_ferma_view),
+    path("api/temi", knowledge.temi_view),
+    path("api/graph", documenti.graph_view),
+    path("api/documents", documenti.documents_view),
+    path("api/search", documenti.search_view),
+    path("api/doc", documenti.doc_view),
+    path("api/file", documenti.file_view),
+    path("api/chat", chat.chat_view),
+    path("api/chats", chat.chats_view),
+    path("api/chats/<int:conversation_id>", chat.chat_detail_view),
+    path("lib/<str:name>", pagine.lib_view),
+    path("app/<str:name>", pagine.app_view),
+    path("marchio/<str:name>", pagine.marchio_view),
+    path("font/<str:name>", pagine.font_view),
+]

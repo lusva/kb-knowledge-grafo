@@ -1,0 +1,16 @@
+# Configurazione degli strumenti di sviluppo (il progetto non si installa come pacchetto).
+
+[tool.ruff]
+target-version = "py313"
+line-length = 120
+extend-exclude = ["kb/migrations"]
+
+[tool.ruff.lint]
+# errori veri (F), stile di base (E, W), trappole comuni (B: eccezioni che
+# perdono la causa, zip che tronca in silenzio, argomenti mutabili…)
+select = ["E", "F", "W", "B", "PLE"]
+ignore = [
+    "E501",  # righe lunghe: quasi tutte dentro prompt, script AppleScript e commenti delle impostazioni
+    "E741",  # `l` come variabile di un ciclo breve: scelta di stile, non un errore
+    "E731",  # piccole lambda assegnate a un nome dentro le funzioni
+]

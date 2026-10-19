@@ -1,0 +1,28 @@
+{% extends "kb/base_auth.html" %}
+{% block titolo %}Accedi — NIKI{% endblock %}
+{% block contenuto %}
+<form class="card" method="post" action="{% url 'login' %}">
+  {% csrf_token %}
+  <div class="marchio">
+    <img src="/marchio/logo-256.png" alt="" width="72" height="72">
+    <h1>NIKI</h1>
+    <div class="sub">La tua knowledge base locale.<br>Accedi per continuare.</div>
+  </div>
+
+  {% for errore in form.non_field_errors %}
+    <div class="error">{{ errore }}</div>
+  {% endfor %}
+  {% if next and user.is_authenticated %}
+    <div class="error">Il tuo account non ha i permessi per questa pagina.</div>
+  {% endif %}
+
+  <label for="id_username">Nome utente</label>
+  <input type="text" name="username" id="id_username" autofocus autocomplete="username" required>
+
+  <label for="id_password">Password</label>
+  <input type="password" name="password" id="id_password" autocomplete="current-password" required>
+
+  <input type="hidden" name="next" value="{{ next }}">
+  <button type="submit">Accedi</button>
+</form>
+{% endblock %}

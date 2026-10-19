@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <title>NIKI</title>
+  <!-- icona dell'app: due aste color crema e quattro barre turchesi in diagonale, la «N» -->
+  <rect width="1024" height="1024" rx="236" fill="#080F20"/>
+  <g fill="#F4F0E6">
+    <rect x="289" y="289" width="52" height="446" rx="26"/>
+    <rect x="682" y="289" width="52" height="446" rx="26"/>
+  </g>
+  <g fill="#7DE3D1">
+    <rect x="368" y="318" width="52" height="151" rx="26"/>
+    <rect x="446" y="371" width="52" height="203" rx="26"/>
+    <rect x="525" y="450" width="52" height="203" rx="26"/>
+    <rect x="604" y="554" width="52" height="151" rx="26"/>
+  </g>
+</svg>

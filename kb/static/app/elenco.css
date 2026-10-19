@@ -1,0 +1,43 @@
+/* Elenco di nomi con × e + (elenco.js). Colori propri con i valori del
+   marchio, come dialogo.css: si usa sia in /config sia nei dialoghi, che
+   chiamano i token in modi diversi. Va caricato dopo i fogli della pagina:
+   i loro stili generici per gli input non devono vincere su questi. */
+.elenco{
+  --el-carta:#ffffff; --el-campo:#f6f4ec; --el-bordo:#e9e6dc; --el-bordo-2:#DDD8CB;
+  --el-testo:#14131F; --el-muted:#8B8778;
+  --el-viola:#7C3AED; --el-viola-soft:#F3EDFE; --el-rosso:#B3261E; --el-rosso-soft:#FDECEA;
+  display:flex; flex-direction:column; gap:8px; width:100%;
+}
+.elenco .elenco-voci{list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:6px;}
+.elenco .elenco-voce{display:inline-flex; align-items:center; gap:2px; max-width:100%;
+  margin:0; padding:3px 3px 3px 10px; border-radius:999px; background:var(--el-viola-soft);
+  border:1px solid #E4D8FC; color:var(--el-testo);}
+.elenco .elenco-nome{font:12.5px/1.4 ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+  overflow-wrap:anywhere;}
+.elenco .elenco-togli{appearance:none; flex:none; display:grid; place-items:center;
+  width:20px; height:20px; margin:0; padding:0; border:0; border-radius:50%; cursor:pointer;
+  background:transparent; color:#6B5B95;}
+.elenco .elenco-togli:hover{background:var(--el-rosso-soft); color:var(--el-rosso);}
+.elenco .elenco-togli:focus-visible{outline:none; box-shadow:0 0 0 2px var(--el-viola);}
+.elenco .elenco-voce.gia{animation:elenco-gia .9s ease-out;}
+@keyframes elenco-gia{0%, 40%{box-shadow:0 0 0 3px rgba(124,58,237,.35);}}
+.elenco .elenco-vuoto{margin:0; padding:3px 0; font-size:12.5px; color:var(--el-muted); font-style:italic;}
+
+.elenco .elenco-aggiungi{display:flex; gap:6px;}
+.elenco input.elenco-nuovo{flex:1; min-width:0; width:auto; height:36px; margin:0; padding:0 11px;
+  border-radius:9px; border:1px solid var(--el-bordo); background:var(--el-campo); color:var(--el-testo);
+  font:13px ui-monospace,'SF Mono',Menlo,Consolas,monospace; outline:none; box-shadow:none;}
+.elenco input.elenco-nuovo::placeholder{color:#A8A495;}
+.elenco input.elenco-nuovo:focus{border-color:#B99AF5; box-shadow:0 0 0 3px var(--el-viola-soft);}
+.elenco input.elenco-nuovo.sbagliato{border-color:var(--el-rosso); box-shadow:0 0 0 3px var(--el-rosso-soft);}
+.elenco .elenco-piu{appearance:none; flex:none; display:grid; place-items:center;
+  width:36px; height:36px; margin:0; padding:0; border-radius:9px; cursor:pointer;
+  border:1px solid var(--el-bordo-2); background:var(--el-carta); color:var(--el-viola);}
+.elenco .elenco-piu:hover{background:var(--el-viola-soft); border-color:#CDB8F8;}
+.elenco .elenco-piu:focus-visible{outline:none; box-shadow:0 0 0 3px var(--el-viola-soft); border-color:#B99AF5;}
+.elenco .elenco-errore{margin:0; font-size:12px; line-height:1.45; color:var(--el-rosso);}
+.elenco .elenco-errore[hidden]{display:none;}
+
+@media (prefers-reduced-motion: reduce){
+  .elenco .elenco-voce.gia{animation:none; box-shadow:0 0 0 3px rgba(124,58,237,.35);}
+}

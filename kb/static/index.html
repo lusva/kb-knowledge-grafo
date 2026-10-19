@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NIKI · Knowledge e grafo</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/marchio/favicon-32.png">
+<link rel="apple-touch-icon" href="/marchio/apple-touch-icon.png">
+<meta name="theme-color" content="#7C3AED">
+<link rel="stylesheet" href="/font/fonts.css">
+<script src="/lib/force-graph.min.js"></script>
+<link rel="stylesheet" href="/app/index.css">
+<link rel="stylesheet" href="/app/dialogo.css">
+<link rel="stylesheet" href="/app/elenco.css">
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ============ barra applicazione ============ -->
+  <header id="topbar">
+    <a class="brand" href="/" title="Knowledge e grafo"><img class="mark" src="/marchio/logo-96.png" alt="" width="26" height="26"><span class="name">NIKI</span></a>
+    <span class="pagina">Knowledge e grafo</span>
+
+    <!-- menu Knowledge: solo la scelta della knowledge attiva; documenti, indice ed eliminazioni stanno nel menu account -->
+    <div class="menu-wrap" id="kb-wrap">
+      <button id="kb-btn" aria-controls="kb-menu" aria-expanded="false" aria-haspopup="menu">
+        <span class="lines">
+          <span class="cap">Knowledge attiva</span>
+          <span class="val" id="kb-name">…</span>
+        </span>
+        <svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="menu" id="kb-menu" role="menu" aria-labelledby="kb-btn">
+        <div class="menu-head">Passa a</div>
+        <div id="kb-options"></div>
+        <button data-act="new" role="menuitem"><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span class="lbl">Nuova knowledge…</span></button>
+      </div>
+    </div>
+
+    <div class="grow"></div>
+    <a class="page-link" id="chat-link" href="/chat">Chat · Fai una domanda</a>
+
+    <div class="status">
+      <span class="dot" id="ollama-dot"></span>
+      <span id="status-line">…</span>
+    </div>
+
+    <!-- Documenti, indice e impostazioni -->
+    <div class="menu-wrap" id="app-wrap">
+      <button id="app-btn" class="ghost avatar-btn" aria-controls="app-menu" aria-expanded="false" aria-haspopup="menu"
+              title="Account e impostazioni" aria-label="Account e impostazioni">
+        <span class="avatar" id="acc-avatar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+      </button>
+      <div class="menu right" id="app-menu" role="menu" aria-labelledby="app-btn">
+        <div class="menu-account">
+          <span class="avatar" id="acc-avatar-big"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+          <span class="lines">
+            <span class="nome" id="acc-nome">…</span>
+            <span class="ruolo" id="acc-ruolo"></span>
+          </span>
+        </div>
+        <div class="menu-sep"></div>
+        <div class="menu-head">Documenti · <span id="mi-kb-nome"></span></div>
+        <button data-act="add-file" role="menuitem"><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M12 18v-6M9 15h6"/></svg><span class="lbl">Aggiungi file…</span></button>
+        <button data-act="add-folder" role="menuitem"><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/><path d="M12 10v6M9 13h6"/></svg><span class="lbl">Aggiungi cartelle…</span></button>
+        <button data-act="filtro" role="menuitem"><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h18l-7 8.5V19l-4 2v-8.5z"/></svg><span class="lbl">Filtro dei file…<small>Tipi, estensioni e cartelle da non importare</small></span></button>
+        <div class="menu-sep"></div>
+        <div class="menu-head">Indice</div>
+        <button data-act="reindex" role="menuitem"><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg><span class="lbl">Reindicizza documenti</span></button>
+        <button data-act="temi" role="menuitem"><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6 5.6 1.9-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/><path d="M19 17v4M17 19h4"/></svg><span class="lbl">Rifai i temi<small>Raggruppa di nuovo per argomento, non reindicizza</small></span></button>
+        <div class="menu-sep"></div>
+        <button data-act="del-files" role="menuitem" class="danger"><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg><span class="lbl">Elimina file o cartelle…</span></button>
+        <button data-act="del" role="menuitem" class="danger" id="mi-kb-del"><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg><span class="lbl">Elimina knowledge…</span></button>
+        <div class="menu-sep mi-staff"></div>
+        <div class="menu-head mi-staff">Amministrazione</div>
+        <button data-act="settings" role="menuitem" class="mi-staff"><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3"/><path d="M1 14h6M9 8h6M17 16h6"/></svg><span class="lbl">Impostazioni</span></button>
+        <button data-act="utenti" role="menuitem" class="mi-staff"><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span class="lbl">Utenti e accessi</span></button>
+        <div class="menu-sep"></div>
+        <button data-act="logout" role="menuitem"><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5M21 12H9"/></svg><span class="lbl">Esci</span></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ avanzamento ============ -->
+  <div id="progress" hidden>
+    <div class="rp-label"><span id="rp-text">Preparo…</span><span class="rp-destra"><span id="rp-count"></span><button type="button" id="rp-ferma" hidden title="Ferma l'indicizzazione dopo il documento in corso"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg>Ferma</button></span></div>
+    <div class="rp-track"><div id="rp-fill"></div></div>
+    <div class="rp-file" id="rp-file"></div>
+  </div>
+
+  <main id="workspace">
+
+    <!-- ============ grafo ============ -->
+    <section id="graph-pane" aria-label="Mappa dei documenti">
+      <div id="graph"></div>
+
+      <div id="graph-tools">
+        <div id="search-wrap">
+          <svg class="ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="search" placeholder="Cerca nei documenti…" aria-label="Cerca nei documenti">
+        </div>
+        <div id="filtri" title="Restringono la ricerca">
+          <select id="f-tipo" aria-label="Tipo di documento">
+            <option value="">Tutto</option>
+            <option value="documento">Solo documenti</option>
+            <option value="immagine">Solo immagini</option>
+          </select>
+          <span id="f-doc" hidden><span id="f-doc-nome"></span><span class="x" role="button" tabindex="0" aria-label="Togli il filtro">×</span></span>
+          <select id="f-periodo" aria-label="Periodo">
+            <option value="">Sempre</option>
+            <option value="30">Ultimo mese</option>
+            <option value="365">Ultimo anno</option>
+            <option value="1095">Ultimi 3 anni</option>
+          </select>
+        </div>
+        <div class="acts">
+          <button id="btn-documents" title="Mostra tutti i documenti indicizzati">Documenti</button>
+          <button id="btn-refresh" title="Ricarica la mappa">Aggiorna mappa</button>
+        </div>
+      </div>
+
+      <div id="search-panel">
+        <div class="sp-head"><span id="sp-title">Risultati</span>
+          <span class="x" id="sp-close" title="Chiudi" role="button" tabindex="0" aria-label="Chiudi i risultati">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+          </span>
+        </div>
+        <div id="search-results"></div>
+      </div>
+
+      <div id="legend">
+        <span><i style="background:#7C3AED"></i>documenti</span>
+        <span><i style="background:#D97706"></i>temi</span>
+        <span><i style="background:#2563EB"></i>tag</span>
+        <span><i style="background:#DB2777"></i>persone</span>
+        <span><i style="background:#0D9488"></i>organizzazioni</span>
+        <span class="nota"><b>Clic su un nodo:</b> apre il documento o mostra quelli collegati al tema, tag, persona o organizzazione. Premi × sul filtro per tornare a tutti.</span>
+      </div>
+
+      <div id="empty-hint">
+        <div>La mappa mostra i documenti e i loro collegamenti: per ora è vuota.</div>
+        <div>Si popola quando i documenti vengono indicizzati e raggruppati per tema.
+          Per aggiungere documenti apri il menu delle impostazioni (l'avatar in alto a destra).</div>
+      </div>
+
+      <div id="preview">
+        <div class="head">
+          <b id="pv-title"></b>
+          <button id="pv-chat" title="Fai una domanda su questo documento">Chiedi su questo</button>
+          <button id="pv-open" title="Apri il file originale">Apri file</button>
+          <button class="x" id="pv-close" title="Chiudi" aria-label="Chiudi l'anteprima">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+          </button>
+        </div>
+        <div id="pv-percorso" title="Dove sta il file sul disco"></div>
+        <pre id="pv-body"></pre>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ============ dialogo di eliminazione (file e cartelle) ============ -->
+<div id="overlay" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="md-title">
+    <div class="modal-head">
+      <h2 id="md-title"></h2>
+      <p id="md-sub"></p>
+      <div class="fb-bar" id="fb-bar">
+        <div class="fb-crumbs" id="fb-crumbs"></div>
+        <input id="fb-filtro" placeholder="Filtra per nome…" autocomplete="off" aria-label="Filtra per nome">
+      </div>
+    </div>
+    <div class="modal-body" id="md-body"></div>
+    <div class="modal-foot">
+      <span id="md-msg" aria-live="polite"></span>
+      <button id="md-annulla">Annulla</button>
+      <button class="danger" id="md-ok" disabled>Elimina</button>
+    </div>
+  </div>
+</div>
+
+<!-- esiti di importazioni, indicizzazioni ed eliminazioni (avvisa() in index.js) -->
+<div id="avvisi" aria-hidden="true"></div>
+
+<!-- per i lettori di schermo: esiti ed errori -->
+<div id="annuncio" class="sr-only" role="status"></div>
+
+<script src="/app/elenco.js"></script>
+<script src="/app/dialogo.js"></script>
+<script src="/app/index.js"></script>
+</body>
+</html>

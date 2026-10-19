@@ -1,0 +1,127 @@
+/* Finestre di conferma, avviso e richiesta (dialogo.js). Colori propri con i
+   valori del marchio: le pagine chiamano i token in modi diversi (--bg è il
+   pannello in caselle.css e lo sfondo in index.css) e questo foglio vale per tutte. */
+.dlg{
+  --d-carta:#ffffff; --d-piede:#FAF8F3; --d-riquadro:#F6F4EE; --d-bordo:#E8E4DA;
+  --d-testo:#14131F; --d-testo-2:#4B5563; --d-muted:#8B8778;
+  --d-viola:#7C3AED; --d-viola-2:#6d2ce0; --d-viola-soft:#F3EDFE;
+  --d-rosso:#B3261E; --d-rosso-2:#951F18; --d-rosso-soft:#FDECEA;
+  --d-ambra:#9A6700; --d-ambra-soft:#FEF4DC;
+  --d-verde:#0D9488; --d-verde-soft:#E3F6F3;
+  --d-accento:var(--d-viola); --d-accento-2:var(--d-viola-2); --d-anello:rgba(124,58,237,.22);
+  --d-icona:var(--d-viola); --d-icona-bg:var(--d-viola-soft);
+
+  /* le pagine azzerano margini e padding di tutto: il centraggio del <dialog> va rimesso */
+  margin:auto; padding:0; border:0; background:transparent; color:var(--d-testo);
+  width:min(452px, calc(100vw - 32px)); max-width:none; max-height:calc(100vh - 32px);
+  overflow:visible; font:400 14px/1.5 'Inter',-apple-system,'Helvetica Neue',Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.dlg--pericolo{--d-accento:var(--d-rosso); --d-accento-2:var(--d-rosso-2); --d-anello:rgba(179,38,30,.22);
+               --d-icona:var(--d-rosso); --d-icona-bg:var(--d-rosso-soft);}
+.dlg--errore{--d-icona:var(--d-rosso); --d-icona-bg:var(--d-rosso-soft);}
+.dlg--attenzione{--d-icona:var(--d-ambra); --d-icona-bg:var(--d-ambra-soft);}
+
+.dlg::backdrop{background:rgba(15,14,26,.42); -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px);}
+.dlg *{box-sizing:border-box; margin:0; padding:0;}
+
+.dlg-carta{background:var(--d-carta); border-radius:16px; overflow:hidden;
+           max-height:calc(100vh - 32px); display:flex; flex-direction:column;
+           box-shadow:0 0 0 1px rgba(15,14,26,.06), 0 2px 6px rgba(15,14,26,.06),
+                      0 28px 70px -18px rgba(15,14,26,.38);}
+.dlg-testa{display:flex; gap:15px; padding:22px 22px 20px; overflow-y:auto; min-height:0;}
+.dlg-icona{flex:none; width:42px; height:42px; border-radius:12px; display:grid; place-items:center;
+           color:var(--d-icona); background:var(--d-icona-bg);
+           box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--d-icona) 12%, transparent);}
+.dlg-icona svg{display:block;}
+.dlg-corpo{flex:1; min-width:0; padding-top:1px;}
+
+.dlg-titolo{font:700 16.5px/1.35 'Montserrat','Inter',-apple-system,sans-serif; letter-spacing:-.012em;
+            color:var(--d-testo); padding-top:9px; overflow-wrap:anywhere;}
+.dlg-testo{margin-top:7px; color:var(--d-testo-2); font-size:13.5px; line-height:1.6;}
+.dlg-testo p + p{margin-top:8px;}
+
+/* la cosa su cui si agisce: un nome, un indirizzo, un file */
+.dlg-oggetto{margin-top:14px; padding:10px 13px; border-radius:10px; background:var(--d-riquadro);
+             border:1px solid var(--d-bordo); display:flex; flex-direction:column; gap:1px;}
+.dlg-oggetto-nome{font-weight:600; font-size:13.5px; color:var(--d-testo); overflow-wrap:anywhere;}
+.dlg-oggetto-dett{font-size:12px; color:var(--d-muted);}
+
+.dlg-elenco{list-style:none; margin-top:12px; max-height:172px; overflow-y:auto; border-radius:10px;
+            background:var(--d-riquadro); border:1px solid var(--d-bordo); padding:7px 0;}
+.dlg-elenco li{padding:1px 13px; font:12.5px/1.5 ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+               color:var(--d-testo); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.dlg-elenco li.altri{font-family:inherit; color:var(--d-muted); font-style:italic;}
+
+/* conseguenze: cosa sparisce (−) e cosa resta (✓) */
+.dlg-punti{list-style:none; margin-top:14px; display:flex; flex-direction:column; gap:8px;}
+.dlg-punti li{display:flex; gap:10px; align-items:flex-start; font-size:13px; line-height:1.5;
+              color:var(--d-testo-2);}
+.dlg-punti .segno{flex:none; width:18px; height:18px; margin-top:1px; border-radius:50%;
+                  display:grid; place-items:center;}
+.dlg-punti .segno svg{stroke-width:2.6;}
+.dlg-punti li.via .segno{background:var(--d-rosso-soft); color:var(--d-rosso);}
+.dlg-punti li.resta .segno{background:var(--d-verde-soft); color:var(--d-verde);}
+
+.dlg-nota{margin-top:14px; display:flex; gap:8px; align-items:flex-start; font-size:12.5px;
+          line-height:1.5; color:var(--d-muted);}
+.dlg-nota > span:first-child{flex:none; margin-top:1px;}
+
+.dlg-campo{display:flex; flex-direction:column; gap:6px; margin-top:14px;}
+
+.dlg-scelte{margin-top:14px; display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:6px;}
+.dlg-scelta{display:flex; gap:9px; align-items:flex-start; padding:8px 11px; border-radius:10px; cursor:pointer;
+  background:var(--d-riquadro); border:1px solid transparent;}
+.dlg-scelta:hover{border-color:var(--d-bordo);}
+.dlg-scelta:has(input:focus-visible){border-color:#B99AF5; box-shadow:0 0 0 3px var(--d-viola-soft);}
+.dlg-scelta input{flex:none; width:15px; height:15px; margin-top:2px; accent-color:var(--d-viola);}
+.dlg-scelta input:focus-visible{outline:none;}
+.dlg-scelta-txt{display:flex; flex-direction:column; min-width:0;}
+.dlg-scelta-nome{font-size:13px; font-weight:600; color:var(--d-testo);}
+.dlg-scelta-dett{font:11.5px/1.45 ui-monospace,'SF Mono',Menlo,Consolas,monospace; color:var(--d-muted);
+  overflow-wrap:anywhere;}
+.dlg-scelta:not(:has(input:checked)) .dlg-scelta-nome{color:var(--d-muted); text-decoration:line-through;}
+.dlg-etichetta{font-size:12px; font-weight:600; color:var(--d-testo-2);}
+.dlg-campo input{width:100%; height:40px; padding:0 12px; border-radius:10px; outline:none;
+                 border:1px solid var(--d-bordo); background:#fff; color:var(--d-testo);
+                 font:400 14px 'Inter',-apple-system,sans-serif;
+                 transition:border-color .12s, box-shadow .12s;}
+.dlg-campo input.mono{font:13px ui-monospace,'SF Mono',Menlo,Consolas,monospace;}
+.dlg-campo input::placeholder{color:#A8A495;}
+.dlg-campo input:focus{border-color:#B99AF5; box-shadow:0 0 0 3px var(--d-viola-soft);}
+
+.dlg-piede{flex:none; display:flex; justify-content:flex-end; gap:10px; padding:13px 22px;
+           background:var(--d-piede); border-top:1px solid var(--d-bordo);}
+.dlg .dlg-btn{appearance:none; display:inline-flex; align-items:center; justify-content:center;
+              min-width:96px; height:38px; padding:0 18px; border-radius:10px; cursor:pointer;
+              font:600 13.5px 'Inter',-apple-system,sans-serif; letter-spacing:-.003em;
+              transition:background .12s, border-color .12s, box-shadow .12s, transform .06s;}
+.dlg .dlg-btn:active:not(:disabled){transform:translateY(1px);}
+.dlg .dlg-btn:focus-visible{outline:none; box-shadow:0 0 0 3px var(--d-anello);}
+.dlg .dlg-annulla{background:#fff; color:var(--d-testo); border:1px solid #DDD8CB;}
+.dlg .dlg-annulla:hover{background:#F3F1EA; border-color:#D2CCBD;}
+.dlg .dlg-annulla:focus-visible{border-color:#C4BDAE; box-shadow:0 0 0 3px rgba(20,19,31,.07);}
+.dlg .dlg-ok{background:var(--d-accento); color:#fff; border:1px solid var(--d-accento);
+             box-shadow:0 1px 2px rgba(15,14,26,.12), inset 0 1px 0 rgba(255,255,255,.14);}
+.dlg .dlg-ok:hover:not(:disabled){background:var(--d-accento-2); border-color:var(--d-accento-2);}
+.dlg .dlg-ok:focus-visible{box-shadow:0 0 0 3px var(--d-anello);}
+.dlg .dlg-ok:disabled{opacity:.45; cursor:default;}
+
+/* entrata e uscita */
+.dlg[open]{animation:dlg-entra .18s cubic-bezier(.2,.8,.25,1);}
+.dlg[open]::backdrop{animation:dlg-velo .18s ease-out;}
+.dlg.esce{animation:dlg-esce .14s ease-in forwards;}
+.dlg.esce::backdrop{animation:dlg-velo .14s ease-in reverse forwards;}
+@keyframes dlg-entra{from{opacity:0; transform:translateY(8px) scale(.975);}}
+@keyframes dlg-esce{to{opacity:0; transform:translateY(4px) scale(.985);}}
+@keyframes dlg-velo{from{opacity:0;}}
+@media (prefers-reduced-motion: reduce){
+  .dlg[open], .dlg[open]::backdrop, .dlg.esce, .dlg.esce::backdrop{animation:none;}
+}
+
+@media (max-width:480px){
+  .dlg-testa{flex-direction:column; gap:12px; padding:20px 18px 18px;}
+  .dlg-titolo{padding-top:0;}
+  .dlg-piede{padding:12px 18px;}
+  .dlg .dlg-btn{flex:1;}
+}
